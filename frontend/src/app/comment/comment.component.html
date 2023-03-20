@@ -1,0 +1,79 @@
+<div *ngIf="currentArticleId" class="card">
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-8">
+                <h6>Comentarios</h6>
+                <ul *ngIf="comments" class="list-group">
+                    <li class="list-group-item" *ngFor="let comment of $any(comments); let i = index">
+                        {{ comment.body }}
+                        <strong>{{ comment.author }}</strong>
+                        <button class="btn btn-success btn-action" (click)="setEditable(comment)">Edit</button>
+                        <button class="btn btn-danger btn-action" (click)="setEditable(comment)">Delete</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-4">
+                <div *ngIf="viewMode; else editable">
+                    <h6>Comentar Articulo</h6>
+                    <div>
+                        <div class="submit-form">
+                            <div *ngIf="!submitted">
+                                <div class="form-group">
+                                    <label for="body">Comment</label>
+                                    <input class="form-control" id="body" required [(ngModel)]="comment.body"
+                                        name="body" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="author">Author</label>
+                                    <input class="form-control" id="author" required [(ngModel)]="comment.author"
+                                        name="author" />
+                                </div>
+                                <p></p>
+                                <button (click)="saveComment()" class="btn btn-success">Submit</button>
+                            </div>
+
+                            <div *ngIf="submitted">
+                                <h4>{{message}}</h4>
+                                <button class="btn btn-success" (click)="newComment()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #editable>
+    <div *ngIf="currentComment && currentComment.id" class="edit-form">
+        <h4>Editar Articulo</h4>
+        <form>
+            <div class="form-group">
+                <label for="body">Body</label>
+                <input type="text" class="form-control" id="body" [(ngModel)]="currentComment.body" name="body" />
+            </div>
+
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" class="form-control" id="author" [(ngModel)]="currentComment.author" name="author" />
+            </div>
+        </form>
+
+        <p></p>
+        <button class="btn btn-danger btn-action-left" (click)="deleteComment()">
+            Delete
+        </button>
+
+        <button type="submit" class="btn btn-success btn-action-left" (click)="updateComment()">
+            Update
+        </button>
+        <p>{{ message }}</p>
+    </div>
+
+    <div *ngIf="!currentComment.id">
+        <br />
+        <p>Cannot access this Comment...</p>
+    </div>
+</ng-template>

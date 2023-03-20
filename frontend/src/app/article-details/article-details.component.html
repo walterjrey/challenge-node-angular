@@ -1,0 +1,62 @@
+<div *ngIf="viewMode; else editable" class="jumbotron">
+    <div *ngIf="currentArticle.id">
+        <h4>
+            Articulo
+            <a class="btn btn-success btn-action" routerLink="/articles/{{ currentArticle.id }}">Edit</a>
+            <a class="btn btn-danger btn-action" routerLink="/articles/{{ currentArticle.id }}">Delete</a>
+        </h4>
+        <div>
+            <label><strong>Title:</strong></label> {{ currentArticle.title }}
+        </div>
+        <div>
+            <label><strong>Body:</strong></label>
+            {{ currentArticle.body }}
+        </div>
+        <div>
+            <label><strong>Author:</strong></label>
+            {{ currentArticle.author }}
+        </div>
+        <app-comment [currentArticleId]="currentArticle.id" [viewMode]="true"></app-comment>
+    </div>
+
+    <div *ngIf="!currentArticle">
+        <br />
+        <p>Please click on a Article...</p>
+    </div>
+</div>
+
+<ng-template #editable>
+    <div *ngIf="currentArticle && currentArticle.id" class="edit-form">
+        <h4>Editar Articulo</h4>
+        <form>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" [(ngModel)]="currentArticle.title" name="title" />
+            </div>
+            <div class="form-group">
+                <label for="body">Body</label>
+                <input type="text" class="form-control" id="body" [(ngModel)]="currentArticle.body" name="body" />
+            </div>
+
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" class="form-control" id="author" [(ngModel)]="currentArticle.author" name="author" />
+            </div>
+        </form>
+
+        <p></p>
+        <button class="btn btn-danger btn-action-left" (click)="deleteArticle()">
+            Delete
+        </button>
+
+        <button type="submit" class="btn btn-success btn-action-left" (click)="updateArticle()">
+            Update
+        </button>
+        <p>{{ message }}</p>
+    </div>
+
+    <div *ngIf="!currentArticle.id">
+        <br />
+        <p>Cannot access this Article...</p>
+    </div>
+</ng-template>
